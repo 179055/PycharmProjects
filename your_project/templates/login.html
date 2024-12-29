@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <style>
+        /* 设置全局的字体和背景 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative; /* 确保遮罩层覆盖在背景图上 */
+        }
+
+        /* 背景图 */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('{{ url_for("static", filename="images/bei.jpg") }}'); /* 背景图路径 */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1; /* 背景图位于最底层 */
+            opacity: 0.6; /* 设置背景透明度 */
+            transition: opacity 0.5s ease; /* 背景透明度渐变 */
+        }
+
+        /* 背景画布 */
+        #snow-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* 确保雪花背景在内容下方 */
+        }
+
+        /* 登录表单的容器 */
+        .login-container {
+            background-color: #fff; /* 设置不透明背景 */
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            z-index: 1; /* 确保表单位于背景上 */
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* 输入框和按钮的样式 */
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: #66afe9;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* 错误消息的样式 */
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景画布 -->
+    <canvas id="snow-canvas"></canvas>
+
+    <div class="login-container">
+        <h2>登录</h2>
+
+        <!-- 显示错误消息 -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div id="error-message" class="alert show">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/login">
+            <label for="name">
+                <div align="left">用户名</div>
+            </label>
+            <div align="left">
+                <input type="text" id="name" name="name" placeholder="请输入用户名" required>
+            </div>
+            <label for="password">
+                <div align="left">密码</div>
+            </label>
+            <div align="left">
+                <input type="password" id="password" name="password" placeholder="请输入密码" required>
+            </div>
+            <button type="submit">登录</button>
+        </form>
+        
+        <p>还没有账户？<a href="/register">注册</a></p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("snow-canvas");
+        const ctx = canvas.getContext("2d");
+
+        // 重新调整 canvas 尺寸
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener("resize", resizeCanvas); // 窗口大小变化时调整 canvas
+
+        resizeCanvas(); // 初始化时调整 canvas
+
+        let snowflakes = [];
+
+        function Snowflake() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 5 + 1;
+            this.speed = Math.random() * 1 + 0.5;
+        }
+
+        Snowflake.prototype.update = function () {
+            this.y += this.speed;
+            if (this.y > canvas.height) {
+                this.y = -this.size;
+                this.x = Math.random() * canvas.width;
+            }
+        };
+
+        Snowflake.prototype.draw = function () {
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.fill();
+        };
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            snowflakes.forEach((snowflake) => {
+                snowflake.update();
+                snowflake.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        for (let i = 0; i < 100; i++) {
+            snowflakes.push(new Snowflake());
+        }
+
+        animate();
+    </script>
+</body>
+</html>
