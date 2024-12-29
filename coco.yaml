@@ -1,0 +1,4 @@
+train: D:\py_xiangm\学生行为\dataset\images
+val: D:\py_xiangm\学生行为\dataset\images
+nc: 1  # 类别数目
+names : ["people"]
