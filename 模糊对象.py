@@ -7,7 +7,7 @@ import cv2
 from ultralytics import YOLO
 from ultralytics.utils.plotting import Annotator, colors
 
-model =YOLO(r"D:\py_xiangm\学生行为\runs\detect\train6\weights\best.pt")
+model =YOLO(r"D:\py_xiangm\学生行为\yolo11n.pt")
 names = model.names
 
 cap = cv2.VideoCapture(r"D:\py_xiangm\学生行为\测试视频2.mp4")

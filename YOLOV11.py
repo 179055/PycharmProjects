@@ -9,6 +9,6 @@ model = YOLO("yolo11s.pt")
 # # Train the model on the COCO8 example dataset for 100 epochs
 # results = model.train(data=r"D:\py_xiangm\Car\coco.yaml", epochs=100, imgsz=640)
 if __name__ == '__main__':
-    results = model.train(data="coco.yaml", epochs=100, imgsz=640, batch=8, amp=True)
+    results = model.train(data="coco.yaml", epochs=150, imgsz=640, batch=16, amp=True)
 
 

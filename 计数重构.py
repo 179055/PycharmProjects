@@ -96,7 +96,7 @@ region = solutions.RegionCounter(
     db_connector=db_connector,  # 将数据库连接传递给 RegionCounter
     show=True,
     region=region_points,
-    model=r"D:\py_xiangm\学生行为\runs\detect\train6\weights\best.pt",
+    model=r"D:\py_xiangm\学生行为\yolo11n.pt",
     iou=0.3,
     device='cuda'  # 启用 GPU
 )

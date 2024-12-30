@@ -31,6 +31,18 @@ class DatabaseConnector:
         self.cursor.execute(query, (track_id, class_name, in_count, out_count, detection_time))
         self.conn.commit()
 
+    def insert_region_count(self, region_name, count, detection_time):
+        """将区域计数插入到数据库，手动提供 ID"""
+        try:
+            query = """
+            INSERT INTO C##YUANWEIHUA.数量统计 (ID, region_name, count, detection_time)
+            VALUES (C##YUANWEIHUA.SEQ_ID.NEXTVAL, :1, :2, TO_TIMESTAMP(:3, 'YYYY-MM-DD HH24:MI:SS'))
+            """
+            self.cursor.execute(query, (region_name, count, detection_time))
+            self.conn.commit()
+        except cx_Oracle.DatabaseError as e:
+            error, = e.args
+            print(f"数据库错误: {error.code}, {error.message}")
     def close(self):
         """关闭数据库连接"""
         if self.cursor:

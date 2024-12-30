@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="V11" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="CarV8" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="V11" project-jdk-type="Python SDK" />
 </project>
